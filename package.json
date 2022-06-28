@@ -1,0 +1,34 @@
+{
+	"name": "@ph/ag",
+	"version": "0.1.0",
+	"description": "A utils tool to auto generate eslint and prettier config in current project.",
+	"bin": {
+		"ag": "bin/ag.mjs"
+	},
+	"os": [
+		"!win32"
+	],
+	"main": "src/index.ts",
+	"author": "ph",
+	"scripts": {
+		"test": "esno src/index.ts",
+		"build": "unbuild"
+	},
+	"keywords": [
+		"tools",
+		"eslint",
+		"prettier",
+		"auto-tools"
+	],
+	"license": "ISC",
+	"devDependencies": {
+		"@types/node": "^18.0.0",
+		"@types/prompts": "^2.0.14",
+		"esno": "^0.16.3",
+		"typescript": "^4.7.4",
+		"unbuild": "^0.7.4"
+	},
+	"dependencies": {
+		"prompts": "^2.4.2"
+	}
+}

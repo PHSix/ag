@@ -1,0 +1,3 @@
+- [ ] mutil filetype support (.prettierrc, .prettier.js, etc...)
+- [ ] detect config file has existed (protect task stable)
+- [ ] tsconfig support
