@@ -1,11 +1,9 @@
 
-export const ESLINT_TEMPLATE = `
-module.exports = {
+export const ESLINT_TEMPLATE = `module.exports = {
 }
 `
 
-export const PRETTIER_TEMPLATE = `
-{
+export const PRETTIER_TEMPLATE = `{
 	"useTabs": true,
 	"tabWidth": 2,
 	"jsxSingleQuote": true,
