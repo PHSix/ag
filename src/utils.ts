@@ -1,5 +1,5 @@
 import { existsSync, readdirSync, statSync, writeFileSync } from "fs";
-import { ESLINT_TEMPLATE, PRETTIER_TEMPLATE } from "./template";
+import { ESLINT_JS_TEMPLATE, PRETTIER_JSON_TEMPLATE } from "./template";
 
 const DEBUG = false;
 
@@ -14,9 +14,9 @@ const jobQueue: IJob[] = [];
 function getTemplate(c: TemplateType): string {
 	switch (c) {
 		case "eslint":
-			return ESLINT_TEMPLATE;
+			return ESLINT_JS_TEMPLATE;
 		case "prettier":
-			return PRETTIER_TEMPLATE;
+			return PRETTIER_JSON_TEMPLATE;
 		default:
 			return "";
 	}
