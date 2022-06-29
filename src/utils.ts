@@ -1,95 +1,109 @@
 import { existsSync, readdirSync, statSync, writeFileSync } from "fs";
-import { ESLINT_TEMPLATE, PRETTIER_TEMPLATE } from "./template"
+import { ESLINT_TEMPLATE, PRETTIER_TEMPLATE } from "./template";
 
-const DEBUG = false
+const DEBUG = false;
 
 interface IJob {
 	template: string;
 	targetPath: string;
 }
+type TemplateType = "eslint" | "prettier";
 
-const jobQueue: IJob[] = []
+const jobQueue: IJob[] = [];
 
-function isRoot(path: string) {
-	const status = statSync(path)
-	if (!status.isDirectory()) {
-		return false
+function getTemplate(c: TemplateType): string {
+	switch (c) {
+		case "eslint":
+			return ESLINT_TEMPLATE;
+		case "prettier":
+			return PRETTIER_TEMPLATE;
+		default:
+			return "";
 	}
-	const dir = readdirSync(path)
-	if ([...dir.entries()].some((item) => item[1] === "package.json")) {
-		return true
-	}
-	return false
 }
 
+function isRoot(path: string) {
+	const status = statSync(path);
+	if (!status.isDirectory()) {
+		return false;
+	}
+	const dir = readdirSync(path);
+	if ([...dir.entries()].some((item) => item[1] === "package.json")) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * input a job target path and output a IJob
+ */
+function prepareConfig(c: TemplateType, path: string): IJob {
+	if (fileExisted(path)) {
+		throw Error("eslint config has exiteds, panic this job.");
+	}
+	return {
+		template: getTemplate(c),
+		targetPath: path,
+	};
+}
 
 function tail<T>(arr: Array<T>): Array<T> {
-	arr.pop()
-	return arr
+	arr.pop();
+	return arr;
 }
 
 function valid(path: string) {
-	if (path.split("/").length === 1) {
-		return false
+	if (path.split("/").length <= 1) {
+		return false;
 	}
-	return true
+	return true;
 }
 
-export function findRoot(path :string) : Promise<string> {
+export function findRoot(path: string): Promise<string> {
 	if (isRoot(path)) {
-		return Promise.resolve(path)
-	}
-	else {
+		return Promise.resolve(path);
+	} else {
 		if (valid(path)) {
-			return findRoot(tail(path.split("/")).join("/"))
+			return findRoot(tail(path.split("/")).join("/"));
 		}
-		return Promise.reject("Failed find root path.")
+		return Promise.reject("Failed find root path.");
 	}
 }
 
 export function fileExisted(path: string) {
-	return existsSync(path)
+	return existsSync(path);
 }
 
 export function log(msg: unknown) {
 	if (DEBUG) {
-		console.log(msg)
+		console.log(msg);
 	}
 }
 
-type EConfigTemplate = "eslint" | "prettier"
-
 // add a job for jobQueue
 // path ( include file name, like: /home/${User}/project/eslint.js )
-export function writeConfig(c: EConfigTemplate, path: string) {
-	if (c === "eslint") {
-		log(`write eslint config file to ${path}`)
-		if (fileExisted(path)) {
-			throw Error("eslint config has exiteds, panic this job.")
-		}
-		jobQueue.push({
-			template: ESLINT_TEMPLATE,
-			targetPath: path
-		})
-	}else if(c === "prettier") {
-		log(`write prettier config file to ${path}`)
-		if (fileExisted(path)) {
-			throw Error("prettier config has exiteds, panic this job.")
-		}
-		jobQueue.push({
-			template: PRETTIER_TEMPLATE,
-			targetPath: path
-		})
+export function writeConfig(c: TemplateType, rootPath: string) {
+	let path = rootPath;
+	switch (c) {
+		case "eslint":
+			path += "eslint.js";
+			break;
+		case "prettier":
+			path += ".prettierrc";
+			break;
+		default:
+			throw Error('config template type not exist.');
 	}
+	jobQueue.push(prepareConfig(c, path));
 }
 
 function pullJob(job: IJob) {
 	writeFileSync(job.targetPath, job.template);
-	return
+	return;
 }
 
 export function doJobs() {
 	for (let job of jobQueue) {
-		pullJob(job)
+		pullJob(job);
 	}
 }

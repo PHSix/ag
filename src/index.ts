@@ -23,10 +23,10 @@ const questions: PromptObject[] = [
 	const rootPath = await findRoot(cwd)
 	const response = await prompts(questions)
 	if (response["eslint"]) {
-		writeConfig("eslint", rootPath + "/eslint.js")
+		writeConfig("eslint", rootPath)
 	}
 	if (response["prettier"]) {
-		writeConfig("prettier", rootPath + "/.prettierrc")
+		writeConfig("prettier", rootPath)
 	}
 	doJobs()
 })()
