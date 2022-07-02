@@ -1,25 +1,18 @@
 import { existsSync, readdirSync, statSync, writeFileSync } from "fs";
-import { ESLINT_JS_TEMPLATE, PRETTIER_JSON_TEMPLATE } from "./template";
+import { eslintConfigsPath, prettierConfigsPath, TEMPLATE, TemplateType } from "./template";
+import { green } from "kolorist";
 
-const DEBUG = false;
+const DEBUG = true;
 
 interface IJob {
 	template: string;
 	targetPath: string;
 }
-type TemplateType = "eslint" | "prettier";
 
 const jobQueue: IJob[] = [];
 
 function getTemplate(c: TemplateType): string {
-	switch (c) {
-		case "eslint":
-			return ESLINT_JS_TEMPLATE;
-		case "prettier":
-			return PRETTIER_JSON_TEMPLATE;
-		default:
-			return "";
-	}
+	return TEMPLATE[c];
 }
 
 function isRoot(path: string) {
@@ -39,7 +32,7 @@ function isRoot(path: string) {
  */
 function prepareConfig(c: TemplateType, path: string): IJob {
 	if (fileExisted(path)) {
-		throw Error("eslint config has exiteds, panic this job.");
+		throw Error(c + " has exiteds, panic this job.");
 	}
 	return {
 		template: getTemplate(c),
@@ -84,15 +77,10 @@ export function log(msg: unknown) {
 // path ( include file name, like: /home/${User}/project/eslint.js )
 export function writeConfig(c: TemplateType, rootPath: string) {
 	let path = rootPath;
-	switch (c) {
-		case "eslint":
-			path += "eslint.js";
-			break;
-		case "prettier":
-			path += ".prettierrc";
-			break;
-		default:
-			throw Error('config template type not exist.');
+	if (TEMPLATE[c]) {
+		path += "/" + c;
+	} else {
+		throw Error("config template type not exist.");
 	}
 	jobQueue.push(prepareConfig(c, path));
 }
@@ -105,5 +93,32 @@ function pullJob(job: IJob) {
 export function doJobs() {
 	for (let job of jobQueue) {
 		pullJob(job);
+	}
+
+	console.log(green("Jobs all have finish."));
+}
+
+export function configCanDetect(rootPath: string, t: TemplateType) {
+	if (t.match("eslint")) {
+		if (
+			eslintConfigsPath.some((item) => {
+				return fileExisted(rootPath + "/" + item);
+			})
+		) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	if (t.match("prettier")) {
+		if (
+			prettierConfigsPath.some((item) => {
+				return fileExisted(rootPath + "/" + item);
+			})
+		) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

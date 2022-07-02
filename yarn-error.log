@@ -1,0 +1,67 @@
+Arguments: 
+  /home/ph/.nvm/versions/node/v18.1.0/bin/node /home/ph/.npm-global/bin/yarn
+
+PATH: 
+  /home/ph/.local/bin:/home/ph/.local/share/pnpm:/home/ph/.dvm/bin:/home/ph/.deno/bin:/home/ph/.local/bin:/home/ph/.local/share/pnpm:/home/ph/.dvm/bin:/home/ph/.deno/bin:/home/ph/.nvm/versions/node/v18.1.0/bin:/usr/lib64/ccache:/home/ph/.cargo/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:/usr/sbin:/home/ph/.npm-global/bin:/home/ph/go/bin:/home/ph/.npm-global/bin:/home/ph/go/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.1.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.npmmirror.com/prompts: tunneling socket could not be established, cause=connect ECONNREFUSED ::1:7890
+      at ClientRequest.onError (/home/ph/.npm-global/lib/node_modules/yarn/lib/cli.js:152376:17)
+      at Object.onceWrapper (node:events:642:26)
+      at ClientRequest.emit (node:events:527:28)
+      at Socket.socketErrorListener (node:_http_client:454:9)
+      at Socket.emit (node:events:527:28)
+      at emitErrorNT (node:internal/streams/destroy:151:8)
+      at emitErrorCloseNT (node:internal/streams/destroy:116:3)
+      at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+
+npm manifest: 
+  {
+  	"name": "@ph/ag",
+  	"version": "0.1.0",
+  	"description": "A utils tool to auto generate eslint and prettier config in current project.",
+  	"bin": {
+  		"ag": "bin/ag.mjs"
+  	},
+  	"os": [
+  		"!win32"
+  	],
+  	"main": "src/index.ts",
+  	"author": "ph",
+  	"scripts": {
+  		"test": "esno src/index.ts",
+  		"build": "unbuild"
+  	},
+  	"keywords": [
+  		"tools",
+  		"eslint",
+  		"prettier",
+  		"auto-tools"
+  	],
+  	"license": "ISC",
+  	"devDependencies": {
+  		"@types/node": "^18.0.0",
+  		"@types/prompts": "^2.0.14",
+  		"esno": "^0.16.3",
+  		"typescript": "^4.7.4",
+  		"unbuild": "^0.7.4"
+  	},
+  	"dependencies": {
+  		"prompts": "^2.4.2"
+  	}
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
