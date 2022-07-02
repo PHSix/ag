@@ -2,7 +2,7 @@ import { existsSync, readdirSync, statSync, writeFileSync } from "fs";
 import { eslintConfigsPath, prettierConfigsPath, TEMPLATE, TemplateType } from "./template";
 import { green } from "kolorist";
 
-const DEBUG = true;
+const DEBUG = false;
 
 interface IJob {
 	template: string;

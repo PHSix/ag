@@ -1,6 +1,6 @@
 import prompts from "prompts";
 import { PromptObject } from "prompts";
-import { yellow as warn } from "kolorist";
+import { red, yellow as warn } from "kolorist";
 import { green } from "kolorist";
 import { findRoot, writeConfig, doJobs, configCanDetect, log } from "./utils";
 import {
@@ -16,7 +16,14 @@ const questions: PromptObject[] = [];
 
 (async function () {
 	const cwd = process.cwd();
-	const rootPath = await findRoot(cwd);
+	let rootPath: string;
+	try {
+		rootPath = await findRoot(cwd);
+	} catch (err) {
+		console.log(red("Can not detect your project in " + cwd + "."));
+		return;
+	}
+	console.log(green("Detect your current project is " + rootPath + "."));
 	if (!eslintConfigsPath.some((item) => configCanDetect(rootPath, item))) {
 		log(green("eslint config don't existed."));
 		questions.push(eslintConfirm);
