@@ -1,9 +1,8 @@
-import { findRoot, writeConfig, doJobs, configCanDetect, log } from "./utils";
 import prompts from "prompts";
 import { PromptObject } from "prompts";
-// import { log, warn } from "console";
 import { yellow as warn } from "kolorist";
 import { green } from "kolorist";
+import { findRoot, writeConfig, doJobs, configCanDetect, log } from "./utils";
 import {
 	eslintConfigsPath,
 	eslintConfirm,
